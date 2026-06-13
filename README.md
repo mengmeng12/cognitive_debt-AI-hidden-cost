@@ -1,6 +1,6 @@
 # Cognitive Debt: AI as Intellectual Leverage and the Dynamics of Systemic Fragility
 
-**Working Paper** | New York University | June 2026
+**Working Paper** | Shuchen Meng | New York University | June 2026
 
 ---
 
@@ -99,11 +99,12 @@ pdflatex main.tex
 ## Citation
 
 ```bibtex
-@unpublished{CognitivDebt2026,
-  author = {[Author]},
+@unpublished{Meng2026CognitiveDebt,
+  author = {Shuchen Meng},
   title  = {Cognitive Debt: {AI} as Intellectual Leverage and the Dynamics of Systemic Fragility},
   year   = {2026},
-  note   = {Working Paper, New York University}
+  note   = {Working Paper, New York University},
+  email  = {sm13533@nyu.edu}
 }
 ```
 
