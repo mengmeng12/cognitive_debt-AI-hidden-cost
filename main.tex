@@ -97,8 +97,9 @@ at quality rated higher by independent evaluators.
 analysts, replicate the productivity gain for routine in-distribution tasks---and
 then ask workers to solve problems beyond the AI's training frontier.
 For these \emph{out-of-distribution} tasks, the high-AI-use group
-performs \emph{worse} than the control group: AI reliance has eroded the
-unaided judgment required to recognise when AI is unreliable.
+performs \emph{worse} than the control group, consistent with overreliance
+and miscalibration at the AI capability frontier. We interpret this as a
+short-run analogue of the longer-run cognitive-capital mechanism developed below.
 
 The pattern is not an anomaly. It is the signature of a structural mechanism that
 this paper formalises: short-run productivity and long-run cognitive capacity are
@@ -108,8 +109,8 @@ what agents can produce \emph{with} AI and what they can produce \emph{without} 
 We call this stock \emph{cognitive debt}.
 
 \paragraph{This paper.}
-We develop a dynamic general-equilibrium model of cognitive debt accumulation,
-systemic fragility, and welfare. The framework has two distinguishing features.
+We develop a dynamic equilibrium model of AI adoption with aggregate cognitive
+externalities, addressing cognitive debt accumulation, systemic fragility, and welfare. The framework has two distinguishing features.
 First, cognitive capital functions as the \emph{collateral} underlying AI adoption:
 the marginal product of AI is strictly proportional to unaided cognitive capacity,
 so capital erosion feeds back into rising AI dependence in a self-reinforcing cycle.
@@ -260,6 +261,25 @@ repayment: hand-derivation, unaided testing, active verification, first-principl
 reconstruction.
 \end{itemize}
 
+\subsubsection*{Competitive output benchmark}
+
+Agents operate in a competitive environment where output is evaluated against an
+endogenous aggregate benchmark. Let $\bar{y}_t$ denote the symmetric-equilibrium
+average output. The per-period payoff for agent $i$ in state $s$ is:
+\begin{equation}
+u_{it}^s = y_{it}^s - \chi\,\max\bigl\{0,\; \bar{y}_t - y_{it}^s\bigr\},
+\label{eq:benchmark}
+\end{equation}
+where $\chi \geq 0$ is a competitive pressure parameter capturing wage penalties,
+labour-market displacement, or organisational ranking from falling below the
+benchmark. Each agent takes $\bar{y}_t$ as given; the social planner internalises
+its endogeneity. In the symmetric equilibrium $y_{it}^s = \bar{y}_t$, so the
+penalty is zero in realisation; but the threat of falling below the benchmark when
+others maintain high $A_t$ creates a strategic complementarity that drives
+over-adoption at the social level (Section~\ref{sec:welfare}). The output constraint
+$y_{it} \geq w$ in the post-crisis analysis (Section~\ref{sec:fcl}) is the
+realised form of this benchmark when competitive pressure is acute.
+
 \subsection{Production Technology}
 \label{sec:production}
 
@@ -388,6 +408,15 @@ rising prompt dependency, declining verification skills). The term $d(a_{it})$
 reflects new debt issuance, convex in $a_{it}$ because marginal substitution increasingly
 replaces higher-order reasoning. The term $-\rho x_{it}$ is debt repayment.
 
+We impose the non-negativity constraint $b_{i,t+1} \geq 0$: cognitive debt cannot
+become negative (agents cannot be ``ahead'' of their task demands). This is enforced
+via the upper bound on deliberate practice:
+\begin{equation}
+x_{it} \leq \frac{(1+r_b)\,b_{it} + d(a_{it})}{\rho}.
+\label{eq:b_nonneg}
+\end{equation}
+When this constraint is slack, the dynamics follow \eqref{eq:b_law} as written.
+
 \begin{assumption}[Debt compounding dominates depreciation]
 \label{ass:compounding}
 $r_b > \delta$ and there exists $\bar{a} < 1$ such that for $a \geq \bar{a}$,
@@ -432,7 +461,8 @@ q_{t+1} = \bar{q} \cdot (1 - \gamma \bA_t) \cdot (1 + \eta\, \Omega_t)^{-1},
 \label{eq:quality}
 \end{equation}
 where $\bA_t = \int_0^1 a_{it}\, \diff i$, $\Omega_t = \bB_t / \bK_t$ is the
-aggregate cognitive leverage ratio, $\gamma > 0$, and $\eta > 0$.
+aggregate cognitive leverage ratio, $\gamma \in (0,1)$ (ensuring $q_{t+1} > 0$
+whenever $\bA_t \in [0,1]$), and $\eta > 0$.
 \end{assumption}
 
 The first factor $(1 - \gamma \bA_t)$ captures \emph{model collapse}
@@ -446,26 +476,36 @@ and systematic biases propagate unfiltered into knowledge stocks.
 \subsection{Information Structure and Belief Dynamics}
 \label{sec:beliefs}
 
-Agents are rational Bayesians. They observe their own output and whether a crisis
-occurs, but they do not observe the aggregate leverage ratio $\Omega_t$ or the true
-crisis probability $\pi_t$. The subjective probability of the stress state is updated
-by:
+Agents are rational conditional on a misspecified perceived law of motion in which
+stress arrivals are estimated from realised crisis frequencies. They observe their
+own output and whether a crisis occurs, but do not observe the aggregate leverage
+ratio $\Omega_t$ or the true crisis probability $\pi_t$. The subjective probability
+of the stress state is updated by:
 \begin{equation}
 \hpi_{t+1} = (1-\lambda)\, \hpi_t + \lambda \cdot \mathbf{1}\{\text{crisis at } t\},
 \label{eq:belief}
 \end{equation}
 where $\lambda \in (0,1)$ is the learning rate. In a period without a crisis,
-$\hpi_{t+1} < \hpi_t$: subjective risk falls. This is the empirically natural
-specification---agents update on realised events---and it generates the Minsky
-divergence characterised in Proposition~\ref{prop:minsky}.
+$\hpi_{t+1} < \hpi_t$: subjective risk falls. This rule is adaptive rather than
+fully Bayesian: a true Bayesian who knew $\pi_t = \Pi(\Omega_t, M_t)$ and the
+aggregate law of motion would filter $\Omega_t$ from the absence of crises, and
+would not necessarily lower $\hat\pi_t$ during an upswing. The updating rule
+\eqref{eq:belief} captures the empirically relevant case of misspecified learning
+from realised crisis frequencies.
 
-The true crisis probability is:
+The true crisis probability depends on aggregate leverage and AI market concentration:
 \begin{equation}
-\pi_t = \Pi(\Omega_t), \qquad \Pi' > 0,\ \Pi'' \geq 0,\ \Pi(0) = 0,\ \lim_{\Omega \to \infty} \Pi(\Omega) = 1.
+\pi_t = \Pi(\Omega_t, M_t), \quad \Pi_\Omega > 0,\; \Pi_{\Omega\Omega} \geq 0,\;
+\Pi_M > 0,\; \Pi_{\Omega M} \geq 0,\; \Pi(0,\cdot) = 0,\;
+\lim_{\Omega \to \infty}\Pi(\Omega,M_t)=1,
 \label{eq:true_pi}
 \end{equation}
-We adopt the parametric form $\Pi(\Omega) = 1 - e^{-\lambda_\pi \Omega^\gamma}$ with
-$\gamma \geq 1$ for the proofs that require explicit computation; the qualitative
+where $M_t$ is the Herfindahl--Hirschman index of AI system market share.
+Higher concentration raises crisis probability ($\Pi_M > 0$) because correlated
+failures are more likely when agents share the same AI systems, and concentrates
+the systemic impact of any single model collapse.
+We adopt the parametric form $\Pi(\Omega,M) = 1 - e^{-\lambda_\pi M\,\Omega^\gamma}$
+with $\gamma \geq 1$ for the proofs that require explicit computation; the qualitative
 results hold for any $\Pi$ satisfying \eqref{eq:true_pi}.
 
 %% ====================================================================
@@ -476,18 +516,27 @@ results hold for any $\Pi$ satisfying \eqref{eq:true_pi}.
 \subsection{The Agent's Problem}
 
 Agent $i$ maximises discounted expected utility, taking as given the AI quality path
-$\{q_t\}$, aggregate variables $\{\Omega_t\}$, and the subjective crisis probability
-$\hpi_t$:
+$\{q_t\}$, aggregate variables $\{\Omega_t, \bar{y}_t\}$, and the subjective crisis
+probability $\hpi_t$:
 \begin{equation}
 V(k, b;\, \hpi, q) = \max_{a \in [0,1],\; x \geq 0} \left\{
-(1-\hpi)\, y^N(k,a;q) + \hpi\, \E_z\bigl[y^S(k, a, b;\, q, z)\bigr]
+\tilde{U}(k,a,b;\,\hpi,q,\bar{y})
 - c(x) + \beta\, \E\bigl[V(k', b';\, \hpi', q')\bigr]
 \right\},
 \label{eq:bellman}
 \end{equation}
 where $c(x)$ is the direct cost of deliberate practice with $c(0) = 0$, $c'(x) > 0$,
-$c''(x) > 0$; $\beta \in (0,1)$ is the discount factor; and $k', b'$ follow
-\eqref{eq:k_law}--\eqref{eq:b_law}.
+$c''(x) > 0$; $\beta \in (0,1)$ is the discount factor; $k', b'$ follow
+\eqref{eq:k_law}--\eqref{eq:b_law}; and
+\[
+\tilde{U} \equiv (1-\hpi)\,u^N(k,a;q,\bar{y}) + \hpi\,\E_z\bigl[u^S(k,a,b;q,z,\bar{y})\bigr],
+\qquad u^s = y^s - \chi\max\bigl\{0,\,\bar{y} - y^s\bigr\}.
+\]
+In the symmetric equilibrium $y^N_{it} = \bar{y}_t$, so the benchmark penalty is
+zero in realisation. The individual FOCs derived below treat $\bar{y}_t$ as fixed,
+yielding the same conditions as if $\chi=0$. The social planner, however, internalises
+$\partial\bar{y}_t/\partial A_t = K_t G_a(A_t;q_t) > 0$, generating the arms-race
+externality quantified in Proposition~\ref{prop:welfare}.
 
 To characterise individual incentives in closed form and derive comparative statics,
 we work with a two-period version of the problem. The infinite-horizon problem
@@ -550,7 +599,14 @@ cognitive capital (at rate $\nu$, valued at $\mu_k$) plus reducing cognitive deb
 \begin{proposition}[Rational Cognitive Debt]
 \label{prop:individual}
 Under Assumptions~\ref{ass:G}--\ref{ass:dynamics}, for any $\hpi \in [0,1)$,
-$q > 0$, and $k > 0$:
+$q > 0$, and $k > 0$, suppose additionally that
+\begin{equation}
+k\,\bigl[(1-\hpi)\,G_a(1;\,q) + \hpi\,\tilde{G}_a(1;\,q,\bar{z})\bigr]
+< \beta\,\bigl[\mu_k\,\ell'(0) + \mu_b\,d'(1)\bigr].
+\label{eq:boundary1}
+\end{equation}
+(The marginal future cost of full substitution exceeds its marginal current benefit
+at $a=1$.) Then:
 \begin{enumerate}
 \item[\emph{(i)}] There exists a unique interior solution $a^* \in (0,1)$ to
 \eqref{eq:foc_a}, and the resulting cognitive debt issuance satisfies $d(a^*) > 0$.
@@ -626,8 +682,17 @@ Section~\ref{sec:hetero}.
 
 \begin{proposition}[Cognitive Minsky Moment]
 \label{prop:minsky}
-Under Assumptions~\ref{ass:G}--\ref{ass:compounding}, fix AI quality $q$ and suppose a tranquil period $\mathcal{T} = \{0, 1, \ldots, T-1\}$
-in which no crisis is realised. Then along any equilibrium path through $\mathcal{T}$:
+Under Assumptions~\ref{ass:G}--\ref{ass:compounding} and adaptive (misspecified)
+belief updating \eqref{eq:belief}, suppose a tranquil period
+$\mathcal{T} = \{0, 1, \ldots, T-1\}$ in which no crisis is realised, and that the
+belief-updating effect dominates the endogenous AI-quality degradation effect:
+\begin{equation}
+\left|\frac{\partial a^*}{\partial \hpi}\,\Delta\hpi_t\right|
+> \left|\frac{\partial a^*}{\partial q}\,\Delta q_t\right|
+\quad \text{for all } t \in \mathcal{T}.
+\label{eq:dominance}
+\end{equation}
+Then along any equilibrium path through $\mathcal{T}$:
 \begin{enumerate}
 \item[\emph{(i)}] Subjective risk is strictly decreasing: $\hpi_{t+1} < \hpi_t$
 for all $t \in \mathcal{T}$.
@@ -636,7 +701,7 @@ $a_{t+1}^* > a_t^*$ for all $t \in \mathcal{T}$.
 \item[\emph{(iii)}] Aggregate cognitive leverage is strictly increasing:
 $\Omega_{t+1} > \Omega_t$ for all $t \in \mathcal{T}$.
 \item[\emph{(iv)}] True crisis probability is strictly increasing:
-$\pi_{t+1} = \Pi(\Omega_{t+1}) > \Pi(\Omega_t) = \pi_t$ for all $t \in \mathcal{T}$.
+$\pi_{t+1} = \Pi(\Omega_{t+1},M_t) > \Pi(\Omega_t,M_t) = \pi_t$ for all $t \in \mathcal{T}$.
 \item[\emph{(v)}] There exists $T^* < \infty$ such that for all $t > T^*$,
 $\hpi_t < \pi_t$ \emph{(the Minsky divergence)}: perceived risk falls below true
 systemic risk.
@@ -647,14 +712,25 @@ systemic risk.
 See Appendix~\ref{app:prop2}.
 \end{proof}
 
-\begin{remark}[Minsky divergence and rational expectations]
-The divergence $\hpi_t < \pi_t$ (part (v)) is consistent with rational Bayesian
-updating because $\pi_t$ is determined by the \emph{endogenous} leverage process,
-which agents do not observe directly. Agents update correctly on realised crises but
-cannot infer the true $\pi_t$ from the absence of crises, because each crisis-free
-period is also evidence that the current leverage level has not yet triggered an event.
-The divergence is therefore not a sign of irrationality; it is a consequence of
-the unobservability of the aggregate state.
+\begin{remark}[Dominance condition and learning specification]
+Condition \eqref{eq:dominance} requires that belief-driven increases in AI
+substitution outweigh the dampening effect from endogenously falling AI quality
+($\partial a^*/\partial q > 0$ while $q_t$ falls from \eqref{eq:quality}).
+Without this condition, AI quality erosion would attenuate or reverse the Minsky
+dynamics---an important general-equilibrium feedback. Condition \eqref{eq:dominance}
+is satisfied when $\gamma \eta$ (the quality-degradation sensitivity) is small
+relative to the belief-learning rate $\lambda$, or when the tranquil period is short
+enough that $\Delta q_t$ is negligible. Identifying this dominance empirically---via
+exogenous variation in AI quality and belief-updating parameters---is a key direction
+for future work.
+
+The divergence $\hpi_t < \pi_t$ (part (v)) arises because agents update on
+realised crises but cannot infer the true $\pi_t = \Pi(\Omega_t, M_t)$ from
+crisis-free periods. Under misspecified learning, each crisis-free period pushes
+$\hat\pi_t$ down regardless of the growing leverage. A correctly specified Bayesian
+who filtered $\Omega_t$ from the data would not necessarily lower $\hat\pi_t$
+during an upswing; the divergence is therefore a consequence of the misspecification,
+not of the underlying endogeneity.
 \end{remark}
 
 \begin{figure}[t]
@@ -678,7 +754,7 @@ subjective risk falls, closing the feedback loop.}
 
 Define the expected crisis loss at date $t$ as:
 \begin{equation}
-L_t = \Pi(\Omega_t) \cdot \kappa\, \E_z\bigl[\max\{0,\, z\, B_t - \mathcal{V}(K_t)\}\bigr],
+L_t = \Pi(\Omega_t, M_t) \cdot \kappa\, \E_z\bigl[\max\{0,\, z\, B_t - \mathcal{V}(K_t)\}\bigr],
 \label{eq:loss}
 \end{equation}
 where $\mathcal{V}(K) = K^\alpha$ ($\alpha \in (0,1)$) is the aggregate verification
@@ -687,14 +763,15 @@ errors as a function of aggregate cognitive capital.
 
 \begin{proposition}[Convex Fragility]
 \label{prop:convex}
-Under Assumptions~\ref{ass:G}--\ref{ass:quality}, the expected crisis loss
-$L_t$ is:
+Under Assumptions~\ref{ass:G}--\ref{ass:quality} and the crisis probability
+specification \eqref{eq:true_pi}, the expected crisis loss $L_t$ is:
 \begin{enumerate}
 \item[\emph{(i)}] Strictly increasing in the aggregate leverage ratio: $\partial L_t / \partial \Omega_t > 0$.
 \item[\emph{(ii)}] Locally convex near the fragility threshold: $\partial^2 L_t / \partial \Omega_t^2 > 0$
 in a neighbourhood of the fragility threshold $\bar{\Omega}$.
-\item[\emph{(iii)}] Strictly increasing in AI model concentration $M_t$ (the HHI
-of AI system market share): $\partial L_t / \partial M_t > 0$.
+\item[\emph{(iii)}] Strictly increasing in AI model concentration: $\partial L_t / \partial M_t > 0$,
+with complementarity $\partial^2 L_t / \partial \Omega_t \partial M_t \geq 0$
+(concentration amplifies the marginal cost of leverage).
 \end{enumerate}
 \end{proposition}
 
@@ -755,8 +832,10 @@ resulting leverage $\Omega_1 > \Omega_{0}^-$.
 
 \begin{proposition}[False-Correction Loop]
 \label{prop:fcl}
-Suppose the output constraint \eqref{eq:output_constraint} is binding at $t=1$
-and that $k_{1} < k_{0}^-$ (cognitive capital has declined through the crisis period).
+Suppose the output constraint \eqref{eq:output_constraint} is binding at $t=1$,
+that $k_{1} < k_{0}^-$ (cognitive capital has declined through the crisis period),
+and that the post-crisis deliberate-practice response is insufficient to offset
+additional debt issuance: $d(a_1^*) - \rho\, x_1^* > 0$.
 Then the post-crisis equilibrium AI substitution intensity satisfies
 $a_1^* > a_0^-$ if and only if:
 \begin{equation}
@@ -764,9 +843,9 @@ $a_1^* > a_0^-$ if and only if:
 > \underbrace{\beta\,\bigl[\mu_k\,\ell'(1-a_0^-) + \mu_b\,d'(a_0^-)\bigr]}_{\text{shadow value of cognitive capital recovery}}.
 \label{eq:fcl_condition}
 \end{equation}
-When condition \eqref{eq:fcl_condition} holds, the post-crisis path satisfies
-$\Omega_{t+1} > \Omega_t$ for all $t \geq 1$ until a new crisis occurs, with
-successive crises of non-decreasing severity.
+When conditions \eqref{eq:fcl_condition} and $d(a_1^*) - \rho x_1^* > 0$ both
+hold, the post-crisis path satisfies $\Omega_{t+1} > \Omega_t$ for all $t \geq 1$
+until a new crisis occurs, with successive crises of non-decreasing severity.
 \end{proposition}
 
 \begin{proof}
@@ -802,27 +881,30 @@ The loop is individually rational but socially destructive.
 
 The decentralised equilibrium exhibits three distinct externalities:
 
-\paragraph{1. Systemic risk externality.} When agent $i$ raises $a_{it}$, the
-aggregate leverage $\Omega_t$ rises. This increases the true crisis probability
-$\pi_t = \Pi(\Omega_t)$ and the expected aggregate loss $L_t$.
-Agent $i$ does not bear the full marginal social cost:
-\begin{equation}
-\frac{\partial L_t}{\partial a_{it}} \cdot \frac{1}{\text{mass of agents}} <
-\frac{\partial L_t}{\partial \Omega_t} \cdot \frac{\partial \Omega_t}{\partial a_{it}}.
-\end{equation}
+\paragraph{1. Systemic risk externality.} Decentralised agents take $\Omega_t$ as
+given, and therefore omit the marginal systemic cost
+$\Pi_\Omega(\Omega_t,M_t)\cdot(\partial\Omega_t/\partial A_t)\cdot L_t^{\text{cond}}$
+that the planner internalises, where $L_t^{\text{cond}} = L_t/\Pi(\Omega_t,M_t)$ is
+the expected conditional loss.
 
 \paragraph{2. Cognitive public-goods externality.} Society's verification capacity
 $\mathcal{V}(K_t)$ is a public good: all agents benefit from a high-$K_t$ population
 that can scrutinise AI outputs, train the next generation, and provide error-correction
 in shared knowledge domains. When agent $i$ substitutes AI for cognition, $K_t$
-falls, degrading this public good. The private return to $a_{it}$ does not account
-for this spillover.
+falls, degrading this public good. The individual internalises the private future
+value of her own $k$ (at shadow price $\mu_k^D$), but not the aggregate spillover;
+the social planner values cognitive capital at $\mu_k^P > \mu_k^D$, reflecting the
+public-good component. The externality is $(\mu_k^P - \mu_k^D)$ per unit of
+forgone practice.
 
-\paragraph{3. Arms-race externality.} Competitive output benchmarking means that
-when agent $i$ raises output via AI, the competitive standard rises for all other
-agents, forcing them to raise their own $a_{jt}$. This is a coordination failure:
-all agents would prefer the equilibrium with lower $a$, but individually each has
-an incentive to deviate upward.
+\paragraph{3. Arms-race externality.} The competitive benchmark $\bar{y}_t$ is
+endogenous to aggregate $A_t$: when the planner raises $A_t$, the benchmark
+$\bar{y}_t = K_t G(A_t;q_t)$ rises, imposing a cost on all agents through the
+utility function \eqref{eq:benchmark}. The individual, taking $\bar{y}_t$ as
+fixed, ignores $\partial\bar{y}_t/\partial A_t = K_t G_a(A_t;q_t) > 0$.
+This strategic complementarity drives aggregate AI adoption above the social
+optimum: all agents would prefer the lower-$A$ equilibrium, but individually
+each has an incentive to maintain high $a$ to avoid the benchmark penalty.
 
 \subsection{The Social Planner's Problem}
 
@@ -835,7 +917,7 @@ of agents' welfare, internalising all externalities:
 \label{eq:planner}
 \end{equation}
 subject to \eqref{eq:k_law}--\eqref{eq:b_law} in aggregate, \eqref{eq:quality},
-and \eqref{eq:true_pi}, taking $\pi_t = \Pi(\Omega_t)$ as endogenous.
+and \eqref{eq:true_pi}, taking $\pi_t = \Pi(\Omega_t, M_t)$ as endogenous.
 
 \begin{proposition}[Decentralised Over-adoption]
 \label{prop:welfare}
@@ -850,15 +932,22 @@ model concentration $M_t$; (ii) the length of the current tranquil period; and
 
 The constrained-optimal Pigouvian tax on AI substitution intensity is:
 \begin{equation}
-\tau_t^* = \underbrace{\beta\,\Pi'(\Omega_t)\,\frac{\partial \Omega_t}{\partial A_t}\,
-L_t / \Pi(\Omega_t)}_{\text{systemic risk externality}}
-+ \underbrace{\beta\,\mu_k\,\frac{\partial K_{t+1}}{\partial A_t}}_{\text{public-goods externality}}
-+ \underbrace{\lambda_y\,\frac{\partial \bar{y}_t}{\partial a_{it}}}_{\text{arms-race externality}},
+\tau_t^* =
+\underbrace{\beta\,\Pi_\Omega(\Omega_t,M_t)\,\frac{\partial \Omega_t}{\partial A_t}\,
+L_t^{\text{cond}}}_{\text{systemic risk externality}}
++\underbrace{\beta\,(\mu_k^P - \mu_k^D)\,\ell'(1-A_t^P)}_{\text{cognitive public-good externality}}
++\underbrace{\chi\,K_t\,G_a(A_t^P;\,q_t)}_{\text{arms-race externality}},
 \label{eq:tax}
 \end{equation}
-evaluated at the social optimum $(A_t^P, X_t^P)$. The optimal tax is (a) increasing
-in aggregate leverage $\Omega_t$, (b) higher when model concentration is higher, and
-(c) counter-cyclical---rising during tranquil periods as leverage accumulates.
+evaluated at the social optimum $(A_t^P, X_t^P)$. The first term captures the
+marginal increase in expected crisis losses from raising aggregate leverage; it is
+positive since $\Pi_\Omega > 0$. The second term uses the shadow-value gap
+$\mu_k^P - \mu_k^D > 0$ to avoid double-counting the privately internalised return
+to cognitive capital; it is positive since both the gap and $\ell'>0$. The third
+term is positive since $\chi \geq 0$ and $G_a > 0$. The optimal tax is (a)
+increasing in aggregate leverage $\Omega_t$, (b) increasing in model concentration
+$M_t$, and (c) counter-cyclical---rising during tranquil periods as leverage
+accumulates.
 \end{proposition}
 
 \begin{proof}
@@ -987,6 +1076,42 @@ Second, the distributional reversal implies that standard skill-biased-technolog
 frameworks---which predict widening inequality---may mischaracterise the long-run
 distribution of cognitive capital under AI adoption.
 
+\subsection{Robustness to the Complementarity Assumption}
+\label{sec:robustness}
+
+The baseline production function $y^N_{it} = k_{it}\,G(a_{it};\,q_t)$ imposes
+strong multiplicative complementarity: the marginal product of AI is proportional
+to $k_{it}$, ensuring $\partial a^*/\partial k > 0$ (Proposition~\ref{prop:individual})
+and underpinning the reversal of fortune (Proposition~\ref{prop:hetero}).
+
+Consider the more general class:
+\[
+y^N_{it} = F(k_{it},\, a_{it};\, q_t), \qquad F_k > 0,\; F_a > 0,\; F_{ka} \text{ unrestricted},
+\]
+with the baseline corresponding to $F = k\,G(a;\,q)$ (where $F_{ka} = G_a > 0$).
+Empirically, \citet{BrynjolfssonEtAl2025} find that generative AI raises
+productivity across skill groups, with heterogeneous effects suggesting
+$F_{ka}$ may be positive but finite, or even negative for some tasks.
+
+Under this general $F$:
+\begin{itemize}
+\item \textbf{Propositions~\ref{prop:individual}--\ref{prop:welfare} survive}
+provided that $F$ inherits the Inada and concavity conditions of Assumption~\ref{ass:G}
+and the dynamics of Assumption~\ref{ass:dynamics} are preserved. The debt
+accumulation, Minsky divergence, convex fragility, false-correction loop, and
+welfare wedge are all driven by the compounding dynamics \eqref{eq:b_law} and the
+misspecified belief updating \eqref{eq:belief}, not by strong complementarity per se.
+\item \textbf{Proposition~\ref{prop:hetero} (reversal of fortune) requires
+$F_{ka}$ sufficiently large.} The reversal depends on $\partial a^*/\partial k > 0$
+(high-$k$ agents adopt more). If $F_{ka} \leq 0$ (AI benefits low-skill workers
+more at the margin), then $\partial a^*/\partial k \leq 0$, the adoption ranking
+reverses, and the reversal of fortune does not occur---instead, low-skill agents
+erode their capital faster. Proposition~\ref{prop:hetero} should therefore be
+read as characterising the case of strong complementarity, which is the empirically
+relevant case for complex cognitive tasks \citep{DellAcquaEtAl2023} but may not
+hold universally.
+\end{itemize}
+
 \subsection{Complementary vs. Substitutive AI}
 
 The model throughout treats $a_{it}$ as substitutive AI use. Complementary AI
@@ -1090,12 +1215,12 @@ Since $\tilde{G}_a(0;q,\bar{z}) = G_a(0; q s(\bar{z})) \cdot s(\bar{z}) = +\inft
 The right-hand side is finite by Assumption~\ref{ass:dynamics}(i)(ii).
 Hence $H(0; \cdot) > 0$.
 
-\textit{At $a = 1$:} $G_a(1;q)$ and $\tilde{G}_a(1;q,\bar{z})$ are finite by
-Assumption~\ref{ass:G}. The right-hand side involves $\ell'(0) \geq 0$ and
-$d'(1) > 0$, so the right-hand side is positive. Given the concavity of $G$ and
-$\ell$, $H(1;\cdot)$ may be negative (i.e., costs exceed benefits at $a=1$).
-Specifically, as $d''(a) > 0$ and $G_{aa} < 0$, $H$ is strictly decreasing in $a$
-for $a$ sufficiently large. By the intermediate value theorem, there exists
+\textit{At $a = 1$:} Under condition \eqref{eq:boundary1}, we have $H(1;\cdot) < 0$:
+\[
+H(1;\cdot) = k\,[(1-\hpi)G_a(1;q)+\hpi\tilde G_a(1;q,\bar z)] - \beta[\mu_k\ell'(0)+\mu_b d'(1)] < 0.
+\]
+By the intermediate value theorem applied to the continuous function $H$
+(with $H(0;\cdot) = +\infty > 0$ and $H(1;\cdot) < 0$), there exists
 $a^* \in (0,1)$ with $H(a^*;\cdot) = 0$.
 
 \textit{Uniqueness:} The second-order condition requires $\partial H / \partial a < 0$.
@@ -1178,9 +1303,15 @@ $\hpi_{t+1} = (1-\lambda)\hpi_t < \hpi_t$ for $\lambda \in (0,1)$. $\square$
 
 \paragraph{Part (ii): AI substitution intensity is increasing.}
 By part (i), $\hpi_t$ is strictly decreasing.
-By Proposition~\ref{prop:individual}(ii), $\partial a^* / \partial \hpi < 0$.
-Hence $a_t^* = a^*(\hpi_t, q)$ is strictly increasing in $t$ along
-$\mathcal{T}$, holding $q$ fixed. $\square$
+By Proposition~\ref{prop:individual}(ii), $\partial a^* / \partial \hpi < 0$ and
+$\partial a^* / \partial q > 0$. The net effect on $a_t^*$ is:
+\[
+\Delta a_t^* = \frac{\partial a^*}{\partial \hpi}\Delta\hpi_t + \frac{\partial a^*}{\partial q}\Delta q_t.
+\]
+Under dominance condition \eqref{eq:dominance},
+$|\partial a^*/\partial\hpi \cdot \Delta\hpi_t| > |\partial a^*/\partial q \cdot \Delta q_t|$,
+so the belief-updating channel dominates the quality-degradation channel and
+$a_{t+1}^* > a_t^*$. $\square$
 
 \paragraph{Part (iii): Aggregate cognitive leverage is increasing.}
 The aggregate dynamics are:
