@@ -35,9 +35,7 @@
 %% ====================================================================
 \begin{document}
 
-\title{\textbf{Cognitive Debt: AI as Intellectual Leverage \\ and the Dynamics of Systemic Fragility}%
-\thanks{We thank participants at \ldots\ for helpful comments.
-All errors are our own.}}
+\title{\textbf{Cognitive Debt: AI as Intellectual Leverage \\ and the Dynamics of Systemic Fragility}}
 
 \author{Shuchen Meng\\
 \small New York University\\
@@ -58,7 +56,7 @@ The model features two state variables per agent---\emph{cognitive capital}
 \emph{cognitive debt} (the corresponding unserviced obligation)---and
 a multiplicative production technology in which cognitive capital functions
 as collateral that determines the return to AI adoption.
-We establish five propositions. (1) Rational agents incur positive cognitive
+We establish six propositions. (1) Rational agents incur positive cognitive
 debt because the costs are deferred, partially external, and masked by short-run
 productivity gains. (2) Tranquil periods lower subjective risk assessments, raise
 AI substitution intensity, and compound leverage---generating a \emph{cognitive
@@ -66,7 +64,7 @@ Minsky moment}: subjective risk falls while true systemic fragility rises.
 (3) Expected crisis losses are convex in the aggregate leverage ratio, so high-leverage
 economies are disproportionately fragile. (4) Post-crisis, output-target pressure
 produces a \emph{false-correction loop}: agents rationally patch AI failures with
-more AI, ratcheting leverage upward and guaranteeing larger future crises. (5) The
+more AI, ratcheting leverage upward and increasing the severity of future crises under competitive output pressure. (5) The
 decentralised equilibrium over-adopts substitutive AI relative to the social
 optimum, owing to three unpriced externalities: systemic risk, cognitive public
 goods, and an arms-race externality. The optimal Pigouvian instrument is an
@@ -390,6 +388,18 @@ rising prompt dependency, declining verification skills). The term $d(a_{it})$
 reflects new debt issuance, convex in $a_{it}$ because marginal substitution increasingly
 replaces higher-order reasoning. The term $-\rho x_{it}$ is debt repayment.
 
+\begin{assumption}[Debt compounding dominates depreciation]
+\label{ass:compounding}
+$r_b > \delta$ and there exists $\bar{a} < 1$ such that for $a \geq \bar{a}$,
+$\ell(1-a)/K_t < r_b \cdot \Omega_t$ (the cognitive capital accumulation from
+practice does not offset leverage compounding at high substitution rates).
+\end{assumption}
+
+Assumption~\ref{ass:compounding} ensures that cognitive debt compounds faster than
+cognitive capital depreciates naturally. Without it, tranquil-period leverage could
+self-correct through passive depreciation; with it, the leverage ratio drifts upward
+unless actively repaid via deliberate practice.
+
 \begin{remark}[Hedge, Speculative, and Ponzi Cognition]
 \label{rem:minsky-taxonomy}
 Following \citet{Minsky1986}'s financial classification, define:
@@ -609,14 +619,14 @@ $\Omega_t = B_t/K_t$.
 
 We focus on symmetric equilibria in which $a_{it}^* = a_t^*$ and $x_{it}^* = x_t^*$
 for all $i$, so $K_t = k_t$ and $B_t = b_t$ in the representative-agent
-characterisation. Heterogeneous-agent extensions are discussed in
-Section~\ref{sec:discussion}.
+characterisation. Heterogeneous-agent extensions are developed in
+Section~\ref{sec:hetero}.
 
 \subsection{Proposition 2: The Cognitive Minsky Moment}
 
 \begin{proposition}[Cognitive Minsky Moment]
 \label{prop:minsky}
-Fix AI quality $q$ and suppose a tranquil period $\mathcal{T} = \{0, 1, \ldots, T-1\}$
+Under Assumptions~\ref{ass:G}--\ref{ass:compounding}, fix AI quality $q$ and suppose a tranquil period $\mathcal{T} = \{0, 1, \ldots, T-1\}$
 in which no crisis is realised. Then along any equilibrium path through $\mathcal{T}$:
 \begin{enumerate}
 \item[\emph{(i)}] Subjective risk is strictly decreasing: $\hpi_{t+1} < \hpi_t$
@@ -681,8 +691,8 @@ Under Assumptions~\ref{ass:G}--\ref{ass:quality}, the expected crisis loss
 $L_t$ is:
 \begin{enumerate}
 \item[\emph{(i)}] Strictly increasing in the aggregate leverage ratio: $\partial L_t / \partial \Omega_t > 0$.
-\item[\emph{(ii)}] Strictly convex in the aggregate leverage ratio: $\partial^2 L_t / \partial \Omega_t^2 > 0$
-in a neighbourhood of any interior $\Omega_t$.
+\item[\emph{(ii)}] Locally convex near the fragility threshold: $\partial^2 L_t / \partial \Omega_t^2 > 0$
+in a neighbourhood of the fragility threshold $\bar{\Omega}$.
 \item[\emph{(iii)}] Strictly increasing in AI model concentration $M_t$ (the HHI
 of AI system market share): $\partial L_t / \partial M_t > 0$.
 \end{enumerate}
@@ -1025,7 +1035,7 @@ rational optimisation, compounds through habit formation and competitive pressur
 and generates Minsky-style fragility: tranquil periods of AI-driven productivity
 systematically build the conditions for cognitive crises.
 
-The five propositions identify the key structural forces. Rational agents borrow
+The six propositions identify the key structural forces. Rational agents borrow
 cognitive debt because the costs are deferred and partially externalised. Aggregate
 leverage rises during tranquil periods because belief updating and output competition
 both push toward more AI use. Crisis losses are convex in leverage, so the tail risk
@@ -1184,18 +1194,10 @@ Compute:
 \frac{1 + d(a_t^*)/[(1+r_b)B_t]}{1 + \ell(1-a_t^*)/[(1-\delta)K_t]}.
 \label{eq:omega_ratio}
 \end{align}
-Since $r_b > \delta$ (cognitive debt compounds faster than cognitive capital
-depreciates naturally---an assumption we make explicit below) and
-$d(a_t^*)/B_t$ is positive, $\Omega_{t+1}/\Omega_t > 1$. Moreover, as $a_t^*$
+By Assumption~\ref{ass:compounding}, $r_b > \delta$ and
+$d(a_t^*)/B_t$ is positive, so $\Omega_{t+1}/\Omega_t > 1$. Moreover, as $a_t^*$
 increases, $d(a_t^*)$ rises and $\ell(1-a_t^*)$ falls, further increasing $\Omega_{t+1}$.
 Hence $\Omega_t$ is strictly increasing. $\square$
-
-\begin{assumption}
-\label{ass:compounding}
-$r_b > \delta$ and there exists $\bar{a} < 1$ such that for $a \geq \bar{a}$,
-$\ell(1-a)/K_t < r_b \cdot \Omega_t$ (the cognitive capital accumulation from
-practice does not offset leverage compounding at high substitution rates).
-\end{assumption}
 
 \paragraph{Part (iv): True crisis probability is increasing.}
 Since $\Pi' > 0$ and $\Omega_t$ is strictly increasing by part (iii),
